@@ -2,6 +2,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include "multLanguage.h"
+#include "tinyxml2.h"
 
 void pause()
 {
@@ -14,8 +15,12 @@ void pause()
 
 int main()
 {
-	multLanguage::getInstance()->setCurrentLanguage(multLanguage::Language::es_ES);
-	std::cout << multLanguage::getInstance()->getCurrentLanguageCode() << std::endl;
+	multLanguage::getInstance()->setCurrentLanguage(multLanguage::Language::ru_RU);
+	std::string str = multLanguage::getInstance()->getString("wow");
+	std::cout << str.c_str() << std::endl;
+
+	//multLanguage::getInstance()->setCurrentLanguage(multLanguage::Language::es_ES);
+	//std::cout << multLanguage::getInstance()->getCurrentLanguageCode() << std::endl;
 
 	pause();
 	multLanguage::destroyInstance();

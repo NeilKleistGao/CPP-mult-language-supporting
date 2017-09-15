@@ -2,15 +2,18 @@
 #include <map>
 #include "tinyxml2.h"
 
-#if (CURRENT_PLATFORM == WINDOWS_PLATFORM)
-#include <Windows.h>
-#include <Winnls.h>
-#pragma comment(lib,"Kernel32.lib")
-#endif
 
 #define WINDOWS_PLATFORM 0x001
 #define LINUX_PLATFORM 0x002
 #define CURRENT_PLATFORM WINDOWS_PLATFORM
+
+#if (CURRENT_PLATFORM == WINDOWS_PLATFORM)
+#include <Windows.h>
+#include <Winnls.h>
+#pragma comment(lib,"Kernel32.lib")
+#elif (CURRENT_PLATFORM == LINUX_PLATFORM)
+#include "iconv.hpp"
+#endif
 
 class multLanguage
 {
@@ -33,12 +36,16 @@ public:
 	bool init();
 	char* getCurrentLanguageCode();
 	void setCurrentLanguage(Language lang);
-	char* getString(char* key);
+	std::string getString(char* key);
 
 private:
 	multLanguage();
 	Language getOSLanguage();
-	char* getFileName();
+	std::string getFileName();
+	//wchar_t* transform(const char* buff);
+#if (CURRENT_PLATFORM == LINUX_PLATFORM)
+	std::string transform(std::string str);
+#endif
 
 	Language m_lang;
 

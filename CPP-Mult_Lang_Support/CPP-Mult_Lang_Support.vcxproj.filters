@@ -32,5 +32,11 @@
     <ClInclude Include="tinyxml2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="iconv.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="iconv.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

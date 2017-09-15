@@ -1,6 +1,6 @@
 #include "multLanguage.h"
 #include <assert.h>
-
+#include <iostream>
 multLanguage* multLanguage::m_ins = NULL;
 
 multLanguage::multLanguage()
@@ -34,8 +34,11 @@ multLanguage* multLanguage::getInstance()
 
 void multLanguage::destroyInstance()
 {
-	delete m_ins;
-	m_ins = NULL;
+	if (m_ins)
+	{
+		delete m_ins;
+		m_ins = NULL;
+	}
 }
 
 char* multLanguage::getCurrentLanguageCode()
@@ -64,16 +67,35 @@ multLanguage::Language multLanguage::getOSLanguage()
 #endif
 }
 
-char* multLanguage::getFileName()
+std::string multLanguage::getFileName()
 {
 	std::string name = m_code[m_lang];
 	name += ".xml";
-	return const_cast<char*>(name.c_str());
+	return name;
 }
 
-char* multLanguage::getString(char* key)
+std::string multLanguage::getString(char* key)
 {
-	return "rua!";
+	std::string file = this->getFileName();
+	tinyxml2::XMLDocument doc;
+	tinyxml2::XMLError err = doc.LoadFile(file.c_str());
+	//tinyxml2::XMLDeclaration *declaration = doc.NewDeclaration("xml version=\"1.0\" encoding=\"UTF-8\"");
+	//doc.LinkEndChild(declaration);
+
+	if (err != tinyxml2::XMLError::XML_SUCCESS)
+	{
+		return "";
+	}
+
+	const char* str = (doc.FirstChildElement(key)->GetText());
+	//std::cout << buff << std::endl;
+	//wchar_t* str = this->transform(buff);
+
+#if (CURRENT_PLATFORM == WINDOWS_PLATFORM)
+	return str;
+#elif (CURRENT_PLATFORM == LINUX_PLATFORM)
+	return transform(str);
+#endif
 }
 
 bool multLanguage::init()
@@ -112,3 +134,13 @@ bool multLanguage::init()
 
 	return true;
 }
+#if (CURRENT_PLATFORM == LINUX_PLATFORM)
+std::string multLanguage::transform(std::string str)
+{
+	int len = str.length();
+	iconvpp::converter conv("UTF-8", "ANSI", true, len);
+	std::string output;
+	conv.convert(str, output);
+	return output;
+}
+#endif

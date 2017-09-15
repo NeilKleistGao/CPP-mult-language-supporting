@@ -1,7 +1,7 @@
-﻿Build started 9/13/2017 11:16:23 PM.
+﻿Build started 9/15/2017 10:44:37 PM.
      1>Project "G:\C++\CPP-Mult_Lang_Support\CPP-Mult_Lang_Support\CPP-Mult_Lang_Support.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         E:\Visual Studio 2013\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt main.cpp multLanguage.cpp
+         E:\Visual Studio 2013\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _CRT_SECURE_NO_WARNINGS /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt main.cpp multLanguage.cpp
          multLanguage.cpp
      1>g:\c++\cpp-mult_lang_support\cpp-mult_lang_support\multlanguage.cpp(25): warning C4002: too many actual parameters for macro 'assert'
          main.cpp
@@ -15,4 +15,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:04.36
+Time Elapsed 00:00:25.33
