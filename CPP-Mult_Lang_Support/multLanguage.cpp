@@ -1,6 +1,5 @@
 #include "multLanguage.h"
 #include <assert.h>
-#include <iostream>
 multLanguage* multLanguage::m_ins = NULL;
 
 multLanguage::multLanguage()
@@ -12,13 +11,13 @@ multLanguage* multLanguage::getInstance()
 {
 	if (m_ins == NULL)
 	{
-		m_ins = new(std::nothrow)multLanguage();
+		m_ins = new(std::nothrow)multLanguage();//create a new instance
 
-		if (m_ins && m_ins->init())
+		if (m_ins && m_ins->init())//success
 		{
 			return m_ins;
 		}
-		else
+		else//not success
 		{
 			delete m_ins;
 			m_ins = NULL;
@@ -28,7 +27,7 @@ multLanguage* multLanguage::getInstance()
 	}
 	else
 	{
-		return m_ins;
+		return m_ins;//the instance has existed.
 	}
 }
 
@@ -43,14 +42,14 @@ void multLanguage::destroyInstance()
 
 char* multLanguage::getCurrentLanguageCode()
 {
-	return const_cast<char*>(this->m_code[this->m_lang].c_str());
+	return const_cast<char*>(this->m_code[this->m_lang].c_str());//get string from map object called m_code
 }
 
 void multLanguage::setCurrentLanguage(multLanguage::Language lang = multLanguage::Language::os_lang)
 {
 	this->m_lang = lang;
 
-	if (lang == multLanguage::Language::os_lang)
+	if (lang == multLanguage::Language::os_lang)//if language is operator system's language, then get it
 	{
 		this->m_lang = this->getOSLanguage();
 	}
@@ -76,20 +75,16 @@ std::string multLanguage::getFileName()
 
 std::string multLanguage::getString(char* key)
 {
-	std::string file = this->getFileName();
+	std::string file = this->getFileName();// relative path of xml file
 	tinyxml2::XMLDocument doc;
-	tinyxml2::XMLError err = doc.LoadFile(file.c_str());
-	//tinyxml2::XMLDeclaration *declaration = doc.NewDeclaration("xml version=\"1.0\" encoding=\"UTF-8\"");
-	//doc.LinkEndChild(declaration);
+	tinyxml2::XMLError err = doc.LoadFile(file.c_str());//load xml file by tinyxml2
 
-	if (err != tinyxml2::XMLError::XML_SUCCESS)
+	if (err != tinyxml2::XMLError::XML_SUCCESS)//if file is not found, it will return an empty string
 	{
 		return "";
 	}
 
 	const char* str = (doc.FirstChildElement(key)->GetText());
-	//std::cout << buff << std::endl;
-	//wchar_t* str = this->transform(buff);
 
 #if (CURRENT_PLATFORM == WINDOWS_PLATFORM)
 	return str;
@@ -100,7 +95,7 @@ std::string multLanguage::getString(char* key)
 
 bool multLanguage::init()
 {
-#if (CURRENT_PLATFORM == WINDOWS_PLATFORM)
+#if (CURRENT_PLATFORM == WINDOWS_PLATFORM)//init map windows code -> enum
 	m_table[0x0804] = multLanguage::Language::zh_CN;
 	m_table[0x0409] = multLanguage::Language::en_US;
 	m_table[0x0419] = multLanguage::Language::ru_RU;
@@ -109,7 +104,7 @@ bool multLanguage::init()
 	m_table[0x040c] = multLanguage::Language::fr_FR;
 	m_table[0x0c0a] = multLanguage::Language::es_ES;
 	m_table[0x0407] = multLanguage::Language::de_DE;
-#elif (CURRENT_PLATFORM == LINUX_PLATFORM)
+#elif (CURRENT_PLATFORM == LINUX_PLATFORM)// init map linux code->enum
 	m_table["zh_CN"] = multLanguage::Language::zh_CN;
 	m_table["en_US"] = multLanguage::Language::en_US;
 	m_table["ru_RU"] = multLanguage::Language::ru_RU;
@@ -120,6 +115,7 @@ bool multLanguage::init()
 	m_table["de_DE"] = multLanguage::Language::de_DE;
 #endif
 
+	//init map enum->string
 	m_code[en_US] = "en_US";
 	m_code[zh_CN] = "zh_CN";
 	m_code[ru_RU] = "ru_RU";
@@ -130,7 +126,6 @@ bool multLanguage::init()
 	m_code[de_DE] = "de_DE";
 
 	this->m_lang = this->getOSLanguage();
-	this->m_max = 8;
 
 	return true;
 }
@@ -138,7 +133,7 @@ bool multLanguage::init()
 std::string multLanguage::transform(std::string str)
 {
 	int len = str.length();
-	iconvpp::converter conv("UTF-8", "ANSI", true, len);
+	iconvpp::converter conv("UTF-8", "ANSI", true, len);//use iconv.from ANSI to UTF-8
 	std::string output;
 	conv.convert(str, output);
 	return output;
